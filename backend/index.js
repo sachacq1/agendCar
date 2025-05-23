@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(cors(
     {
-        origin: "",
+        origin: "https://agend-car.vercel.app/",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true
