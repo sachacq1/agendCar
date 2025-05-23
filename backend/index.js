@@ -4,6 +4,7 @@ import { authRoute } from "./src/routes/authRoute.js";
 import { carRoute } from "./src/routes/carRoute.js";
 import { catalogRoute } from "./src/routes/catalogoCarRoute.js";
 import helmet from "helmet";
+import cors from "cors";
 
 //process.loadEnvFile();
 
