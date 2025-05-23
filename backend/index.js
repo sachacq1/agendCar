@@ -5,7 +5,7 @@ import { carRoute } from "./src/routes/carRoute.js";
 import { catalogRoute } from "./src/routes/catalogoCarRoute.js";
 import helmet from "helmet";
 
-process.loadEnvFile();
+//process.loadEnvFile();
 
 const PORT = process.env.PORT || 3000;
 

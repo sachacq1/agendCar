@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-process.loadEnvFile();
+//process.loadEnvFile();
 
 const URI = process.env.MONGODB_URI;
 

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-process.loadEnvFile();
+//process.loadEnvFile();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 

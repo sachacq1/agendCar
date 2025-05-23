@@ -1,7 +1,7 @@
 import { register, login } from "../models/authModel.js";
 import jwt from "jsonwebtoken";
 
-process.loadEnvFile();
+//process.loadEnvFile();
 const Register = async (req, res) => {
     try {
         const { username, password, email } = req.body;
