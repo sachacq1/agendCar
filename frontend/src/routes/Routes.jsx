@@ -4,6 +4,7 @@ import Login from "../views/login";
 
 const AppRouter = () => {
     return <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
     </Routes>
 }
