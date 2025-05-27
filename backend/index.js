@@ -6,7 +6,7 @@ import { catalogRoute } from "./src/routes/catalogoCarRoute.js";
 import helmet from "helmet";
 import cors from "cors";
 
-//process.loadEnvFile();
+// process.loadEnvFile();
 
 const PORT = process.env.PORT || 3000;
 
@@ -28,6 +28,9 @@ app.use("/auth", authRoute)
 app.use("/autos", carRoute)
 app.use("/api/catalogo", catalogRoute)
 
+app.get("/", (req, res) => {
+    res.send("API funcionando correctamente");
+});
 
 
 

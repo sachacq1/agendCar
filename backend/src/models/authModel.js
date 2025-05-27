@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-//process.loadEnvFile();
+// process.loadEnvFile();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -51,6 +51,7 @@ const register = async (data) => {
             username: data.username,
             password: hashedPassword,
             email: data.email,
+            role: "user",
 
         })
 
