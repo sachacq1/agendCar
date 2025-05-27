@@ -17,6 +17,7 @@ const registerUser = async (username, password, email) => {
         return response.data
     } catch (error) {
         throw new Error("Error al registrar el usuario: " + error.message);
+        console.error(error);
     }
 }
 

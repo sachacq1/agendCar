@@ -4,12 +4,12 @@ import { useAuth } from "../context/authContext.jsx";
 import { registerUser } from "../services/auth.js";
 
 const Register = () => {
-    const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const [form, setForm] = useState({ username: "", email: "", password: "" });
     const navigate = useNavigate();
     const { login } = useAuth();
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({ ...form, [e.target.username]: e.target.value });
     };
 
     const handleRegister = async (e) => {
@@ -41,7 +41,7 @@ const Register = () => {
                         <input
                             type="text"
                             className="form-control"
-                            name="name"
+                            name="username"
                             value={form.name}
                             onChange={handleChange}
                             required
