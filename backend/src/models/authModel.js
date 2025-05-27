@@ -51,7 +51,7 @@ const register = async (data) => {
             username: data.username,
             password: hashedPassword,
             email: data.email,
-            role: "user",
+            role: data.role || "user",
 
         })
 
@@ -60,6 +60,7 @@ const register = async (data) => {
     } catch (error) {
 
         throw new Error("Error al registrar el usuario: " + error.message);
+        console.error(error);
     }
 };
 
