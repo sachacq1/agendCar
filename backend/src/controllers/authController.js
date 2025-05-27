@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 // process.loadEnvFile();
 const Register = async (req, res) => {
     try {
-        const { username, password, email } = req.body;
+        const { username, password, email, role = "user" } = req.body;
         const data = {
             username,
             password,
             email,
-            role: "user"
+            role
         }
 
         const user = await register(data);
@@ -25,6 +25,7 @@ const Register = async (req, res) => {
         return res.status(201).json({ message: "Usuario registrado con éxito", user, token });
     } catch (error) {
         res.status(500).json({ error: error.message });
+        console.error(error);
     }
 }
 
