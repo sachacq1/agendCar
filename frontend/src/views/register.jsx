@@ -42,7 +42,7 @@ const Register = () => {
                             type="text"
                             className="form-control"
                             name="username"
-                            value={form.name}
+                            value={form.username}
                             onChange={handleChange}
                             required
                         />
