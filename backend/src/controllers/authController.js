@@ -8,7 +8,7 @@ const Register = async (req, res) => {
         const data = {
             username,
             password,
-            email
+            email, role
         }
 
         const user = await register(data);

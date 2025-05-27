@@ -11,6 +11,8 @@ import cors from "cors";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
+app.use(helmet());
 app.use(cors(
     {
         origin: "https://agend-car.vercel.app",
@@ -28,7 +30,6 @@ app.use("/api/catalogo", catalogRoute)
 
 
 
-app.use(helmet())
 
 
 

@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema(
     {
         username: {
             type: String,
-            required: true,
-            unique: true,
+            required: true
         },
         password: {
             type: String,
@@ -23,7 +22,12 @@ const userSchema = new mongoose.Schema(
             required: true,
             unique: true,
             match: [/\S+@\S+\.\S+/, "Por favor ingresa un correo electrónico válido"],
-        }
+        },
+        role: {
+            type: String,
+            enum: ["user", "admin"],
+            default: "user",
+        },
     },
     {
         timestamps: true,
@@ -70,7 +74,6 @@ const login = async (data) => {
             throw new Error("Contraseña o usuario incorrecto");
         }
 
-        // 🔧 Generamos el token con "id" en vez de "_id"
         const token = jwt.sign(
             { id: user._id },
             JWT_SECRET,
