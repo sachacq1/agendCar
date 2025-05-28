@@ -40,7 +40,7 @@ const Register = () => {
                             className="form-control"
                             name="username"
                             value={username}
-                            onChange={handleChange}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                     </div>
@@ -51,7 +51,7 @@ const Register = () => {
                             className="form-control"
                             name="email"
                             value={email}
-                            onChange={handleChange}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
@@ -62,7 +62,7 @@ const Register = () => {
                             className="form-control"
                             name="password"
                             value={password}
-                            onChange={handleChange}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
