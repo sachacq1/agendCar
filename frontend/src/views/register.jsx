@@ -4,18 +4,15 @@ import { useAuth } from "../context/authContext.jsx";
 import { registerUser } from "../services/auth.js";
 
 const Register = () => {
-    const [form, setForm] = useState({ username: "", email: "", password: "" });
-    const navigate = useNavigate();
-    const { login } = useAuth();
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await registerUser(form);
+            const response = await registerUser(username, password, email);
             if (response.token) {
                 login(response.token);
                 navigate("/panel");
@@ -42,7 +39,7 @@ const Register = () => {
                             type="text"
                             className="form-control"
                             name="username"
-                            value={form.username}
+                            value={username}
                             onChange={handleChange}
                             required
                         />
@@ -53,7 +50,7 @@ const Register = () => {
                             type="email"
                             className="form-control"
                             name="email"
-                            value={form.email}
+                            value={email}
                             onChange={handleChange}
                             required
                         />
@@ -64,7 +61,7 @@ const Register = () => {
                             type="password"
                             className="form-control"
                             name="password"
-                            value={form.password}
+                            value={password}
                             onChange={handleChange}
                             required
                         />

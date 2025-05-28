@@ -58,9 +58,9 @@ const register = async (data) => {
         await newUser.save();
         return newUser
     } catch (error) {
-
+        console.error(error)
         throw new Error("Error al registrar el usuario: " + error.message);
-        console.error(error);
+
     }
 };
 
