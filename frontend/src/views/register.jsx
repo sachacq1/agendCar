@@ -9,7 +9,7 @@ const Register = () => {
     const { login } = useAuth();
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.username]: e.target.value });
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     const handleRegister = async (e) => {
