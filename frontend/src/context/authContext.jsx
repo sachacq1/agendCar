@@ -21,15 +21,16 @@ const AuthProvider = ({ children }) => {
     };
 
     const login = (token) => {
+
+        localStorage.setItem("token", token);
         const decoded = jwtDecode(token);
 
         setAuthToken(token);
         setRole(decoded.role);
-        setUser(decoded.user);
+        setUser(decoded.username);
 
-        localStorage.setItem("token", token);
         localStorage.setItem("role", decoded.role);
-        localStorage.setItem("user", decoded.user);
+        localStorage.setItem("user", decoded.username);
     };
 
     const logout = () => {
@@ -51,9 +52,13 @@ const AuthProvider = ({ children }) => {
         if (authToken) {
             const decoded = jwtDecode(authToken);
             setRole(decoded.role);
+            setUser(decoded.username);
+
             localStorage.setItem("role", decoded.role);
+            localStorage.setItem("user", decoded.username);
         }
     }, [authToken, navigate]);
+
 
     return (
         <AuthContext.Provider value={{ authToken, role, user, login, logout, isAuthenticated: !!authToken }}>
