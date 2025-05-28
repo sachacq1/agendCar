@@ -8,6 +8,8 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleRegister = async (e) => {
         e.preventDefault();
