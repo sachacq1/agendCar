@@ -27,10 +27,10 @@ const AuthProvider = ({ children }) => {
 
         setAuthToken(token);
         setRole(decoded.role);
-        setUser(decoded.username);
+        setUser(decoded.user);
 
         localStorage.setItem("role", decoded.role);
-        localStorage.setItem("user", decoded.username);
+        localStorage.setItem("user", decoded.user);
     };
 
     const logout = () => {
@@ -52,10 +52,10 @@ const AuthProvider = ({ children }) => {
         if (authToken) {
             const decoded = jwtDecode(authToken);
             setRole(decoded.role);
-            setUser(decoded.username);
+            setUser(decoded.user);
 
             localStorage.setItem("role", decoded.role);
-            localStorage.setItem("user", decoded.username);
+            localStorage.setItem("user", decoded.user);
         }
     }, [authToken, navigate]);
 
