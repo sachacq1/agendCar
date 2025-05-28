@@ -1,49 +1,57 @@
 import { register, login } from "../models/authModel.js";
 import jwt from "jsonwebtoken";
 
-// process.loadEnvFile();
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// REGISTRO
 const Register = async (req, res) => {
     try {
         const { username, password, email, role = "user" } = req.body;
-        const data = {
-            username,
-            password,
-            email,
-            role
-        }
 
-        const user = await register(data);
+        const newUser = await register({ username, password, email, role });
 
-        if (user === null) {
+        if (!newUser) {
             return res.status(400).json({ message: "El usuario ya existe" });
         }
+
         const token = jwt.sign(
-            { id: user._id },
-            process.env.JWT_SECRET,
+            {
+                user: newUser.username,
+                role: newUser.role,
+                _id: newUser._id,
+            },
+            JWT_SECRET,
             { expiresIn: "1d" }
         );
-        return res.status(201).json({ message: "Usuario registrado con éxito", user, token });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-        console.error(error);
-    }
-}
 
+        return res.status(201).json({
+            message: "Usuario registrado con éxito",
+            user: {
+                _id: newUser._id,
+                username: newUser.username,
+                role: newUser.role,
+                email: newUser.email,
+            },
+            token,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// LOGIN
 const Login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const data = {
-            username,
-            password
-        }
-        const token = await login(data);
-        return res.status(200).json({ token });
 
+        const token = await login({ username, password });
+
+        return res.status(200).json({ token });
     } catch (error) {
         console.error(error);
         return res.status(400).json({ error: error.message });
-
     }
-}
+};
 
-export { Register, Login }
+export { Register, Login };
