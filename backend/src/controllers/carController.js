@@ -33,11 +33,23 @@ const createCar = async (req, res) => {
     }
 };
 
+// Obtener autos del usuario
+const getCarsByUser = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const autos = await Car.find({ userId });
+        res.status(200).json(autos);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener autos: " + error.message });
+    }
+};
+
 // Agregar mantenimiento a un auto
 const addMaintenance = async (req, res) => {
     try {
         const { tipo, fecha, kilometraje } = req.body;
         const { carId } = req.params;
+        const userId = req.user._id;
 
         const auto = await Car.findOne({ _id: carId, userId });
 
@@ -55,4 +67,4 @@ const addMaintenance = async (req, res) => {
     }
 };
 
-export { createCar, addMaintenance };
+export { createCar, addMaintenance, getCarsByUser };
