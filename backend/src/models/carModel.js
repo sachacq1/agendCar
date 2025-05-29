@@ -15,11 +15,11 @@ const carSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    anio: {                 // ⚠️ Usamos "anio" en vez de "año" para evitar errores con codificación
+    anio: {
         type: Number,
         required: true
     },
-    userId: {               // Relación con el usuario que lo creó
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
