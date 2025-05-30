@@ -3,7 +3,10 @@ import axios from "axios";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_AUTOS_ENDPOINT,
-    withCredentials: true
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+    }
 });
 
 
