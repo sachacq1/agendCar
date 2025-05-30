@@ -7,7 +7,7 @@ export const getAllCars = async () => {
             Authorization: `Bearer ${token}`
         }
     });
-    return res.data.autos || []; // asegurate de que devuelve un array
+    return res.data.autos || [];
 };
 
 export const addCar = async (data) => {

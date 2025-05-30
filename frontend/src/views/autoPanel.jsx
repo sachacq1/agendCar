@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllCars, addCar, addMantenimiento } from "../services/apiCar";
+import { getAllCars, addCar, addMantenimiento } from "../services/apiCar.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
