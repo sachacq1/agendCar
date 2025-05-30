@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllCars, addCar, addMantenimiento } from "../services/apiCar";
-import axios from "../services/axiosInstance";
+import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
     const [autos, setAutos] = useState([]);
