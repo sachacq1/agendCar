@@ -1,5 +1,4 @@
-import axios from "./axiosInstance"; // si usás una instancia
-// o import axios from "axios"; si no usás instancia
+import axios from "./axiosInstance.js";
 
 export const getAllCars = async () => {
     const token = localStorage.getItem("token");
