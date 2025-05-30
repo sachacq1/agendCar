@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { loginUser } from "../services/auth.js";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../context/authContext.jsx";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { user } = useAuth();
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/panel");
+        }
+    }, [user, navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,7 +23,15 @@ const Login = () => {
             const response = await loginUser(username, password);
             if (response.token) {
                 login(response.token);
-                navigate("/panel");
+
+                const decoded = jwtDecode(response.token);
+
+                if (decoded.role === "admin") {
+                    navigate("/PanelAdmin");
+                } else {
+                    navigate("/panel");
+                }
+
             } else {
                 alert("Error al iniciar sesión");
             }
@@ -26,7 +42,7 @@ const Login = () => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-dark">
+        <div className="d-flex align-items-center justify-content-center min-vh-100 ">
             <div className="card p-4 shadow" style={{
                 maxWidth: "400px", width: "100%", border: "2px solid #b5ff6a",
                 backgroundColor: "black"

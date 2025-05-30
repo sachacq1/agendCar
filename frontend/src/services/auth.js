@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from "./axiosInstance.js";
 
 const loginUser = async (username, password) => {
     try {
-        const response = await axios.post("https://agendcar.onrender.com/auth/login",
+        const response = await axios.post("/auth/login",
             { username, password });
         return response.data
     } catch (error) {
@@ -12,7 +12,7 @@ const loginUser = async (username, password) => {
 
 const registerUser = async (username, password, email) => {
     try {
-        const response = await axios.post("https://agendcar.onrender.com/auth/register",
+        const response = await axios.post("/auth/register",
             { username, password, email });
         return response.data
     } catch (error) {

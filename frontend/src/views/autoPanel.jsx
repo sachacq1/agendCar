@@ -87,7 +87,7 @@ const AutoPanel = () => {
 
     return (
         <>
-            <div className="container py-4 vh-100 w-100" style={{ backgroundColor: "#121212", color: "#00ff88" }}>
+            <div className="container py-4 vh-100 w-100" style={{ backgroundColor: "#121212", color: "#00ff88", opacity: "0.8" }}>
                 <h2 className="text-center mb-4">Mis Autos</h2>
 
                 {/* Botón para mostrar/ocultar formulario */}

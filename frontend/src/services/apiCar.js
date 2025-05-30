@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from "./axiosInstance.js";
 
-const URL = "https://agendcar.onrender.com/autos";
+const AUTOS_ENDPOINT = import.meta.env.VITE_AUTOS_ENDPOINT;
 
 export const getAllCars = async () => {
     try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(URL, {
+        const res = await axios.get(AUTOS_ENDPOINT, {
             headers: { Authorization: `Bearer ${token}` },
         });
         return res.data;
@@ -17,7 +17,7 @@ export const getAllCars = async () => {
 export const addCar = async (auto) => {
     try {
         const token = localStorage.getItem("token");
-        const res = await axios.post(URL, auto, {
+        const res = await axios.post(AUTOS_ENDPOINT, auto, {
             headers: { Authorization: `Bearer ${token}` },
         });
         return res.data;

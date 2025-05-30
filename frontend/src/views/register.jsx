@@ -28,7 +28,7 @@ const Register = () => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-dark">
+        <div className="d-flex align-items-center justify-content-center min-vh-100 ">
             <div className="card p-4 shadow" style={{
                 maxWidth: "400px", width: "100%", border: "2px solid #b5ff6a",
                 backgroundColor: "black"
