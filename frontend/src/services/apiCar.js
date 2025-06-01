@@ -7,7 +7,7 @@ export const getAllCars = async () => {
             Authorization: `Bearer ${token}`
         }
     });
-    return res.data.autos || [];
+    return res.data || [];
 };
 
 export const addCar = async (data) => {

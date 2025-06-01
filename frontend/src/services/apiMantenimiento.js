@@ -3,7 +3,7 @@ import axios from "./axiosInstance.js"
 
 
 // Agregar un mantenimiento a un auto
-const addMaintenanceToCar = async (carId, mantenimiento) => {
+const addMantenimiento = async (carId, mantenimiento) => {
     try {
         const res = await axios.post(`/autos/${carId}/mantenimientos`, mantenimiento);
         return res.data;
@@ -24,4 +24,4 @@ const getMaintenancesByCarId = async (carId) => {
     }
 };
 
-export { addMaintenanceToCar, getMaintenancesByCarId };
+export { addMantenimiento, getMaintenancesByCarId };
