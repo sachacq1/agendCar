@@ -22,7 +22,7 @@ const AutoPanel = () => {
 
     const obtenerCatalogo = async () => {
         try {
-            const res = await axios.get("/catalogo");
+            const res = await axios.get("/api/catalogo");
             setCatalogo(res.data);
         } catch (error) {
             console.error("Error al obtener catálogo:", error.message);
