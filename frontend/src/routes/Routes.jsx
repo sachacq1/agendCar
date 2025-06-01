@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import PanelAdmin from "./pages/PanelAdmin.jsx";
-import AutoPanel from "./pages/AutoPanel.jsx";
+import Home from "../views/home.jsx"
+import Login from "../views/login.jsx";
+import Register from "../views/register.jsx";
+import PanelAdmin from "../views/panelAdmin.jsx";
+import AutoPanel from "../views/autoPanel.jsx";
 import { useAuth } from "./context/authContext.jsx";
 
 const PublicRoute = ({ children }) => children;
