@@ -19,6 +19,10 @@ const PanelAdmin = () => {
             alert("Error al agregar auto");
         }
     };
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login"; // o la ruta que uses para iniciar sesión
+    };
 
     return (
         <div className="container mt-5">
@@ -56,6 +60,11 @@ const PanelAdmin = () => {
                         />
                     </div>
                     <button className="btn btn-success w-100 fw-bold">Agregar Auto</button>
+                    <div className="d-flex justify-content-end mb-3">
+                        <button className="btn btn-danger" onClick={handleLogout}>
+                            Cerrar Sesión
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

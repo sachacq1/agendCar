@@ -80,10 +80,19 @@ const AutoPanel = () => {
         obtenerAutos();
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/home";
+    };
+
     return (
         <div className="container py-4 vh-100 w-100" style={{ backgroundColor: "#121212", color: "#00ff88", opacity: "0.8" }}>
             <h2 className="text-center mb-4">Mis Autos</h2>
-
+            <div className="d-flex justify-content-end mb-3">
+                <button className="btn btn-danger" onClick={handleLogout}>
+                    Cerrar Sesión
+                </button>
+            </div>
             <button
                 className="btn btn-secondary mb-3"
                 onClick={() => setMostrarFormularioAuto(!mostrarFormularioAuto)}
