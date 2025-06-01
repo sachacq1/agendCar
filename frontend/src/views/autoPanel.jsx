@@ -191,7 +191,7 @@ const AutoPanel = () => {
                             }}
                         >
                             <div className="card-body">
-                                <h5>{auto.marca} {auto.modelo} {auto.anio}</h5>
+                                <h5 className="text-white">{auto.marca} {auto.modelo} {auto.anio}</h5>
                                 <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() =>
@@ -205,7 +205,7 @@ const AutoPanel = () => {
 
                                 {selectedCarId === auto._id && (
                                     <div className="mt-3">
-                                        <ul>
+                                        <ul className="text-white">
                                             {auto.mantenimientos.length === 0 ? (
                                                 <li>No hay mantenimientos</li>
                                             ) : (
