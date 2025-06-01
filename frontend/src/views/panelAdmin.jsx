@@ -60,12 +60,13 @@ const PanelAdmin = () => {
                         />
                     </div>
                     <button className="btn btn-success w-100 fw-bold">Agregar Auto</button>
-                    <div className="d-flex justify-content-end mb-3">
-                        <button className="btn btn-danger" onClick={handleLogout}>
-                            Cerrar Sesión
-                        </button>
-                    </div>
+
                 </form>
+            </div>
+            <div className="d-flex justify-content-center mb-3">
+                <button className="btn btn-danger" onClick={handleLogout}>
+                    Cerrar Sesión
+                </button>
             </div>
         </div>
     );
