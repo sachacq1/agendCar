@@ -4,7 +4,7 @@ import Login from "../views/login.jsx";
 import Register from "../views/register.jsx";
 import PanelAdmin from "../views/panelAdmin.jsx";
 import AutoPanel from "../views/autoPanel.jsx";
-import { useAuth } from "./context/authContext.jsx";
+import { useAuth } from "../context/authContext.jsx";
 
 const PublicRoute = ({ children }) => children;
 
