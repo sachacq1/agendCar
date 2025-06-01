@@ -4,6 +4,8 @@ import ReactDom from 'react-dom';
 import AppRouter from './routes/Routes.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/authContext.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import './index.css';
 
 
