@@ -12,7 +12,7 @@ export const getAllCars = async () => {
 
 export const addCar = async (data) => {
     const token = localStorage.getItem("token");
-    const res = await axios.post("/autos", data, {
+    const res = await axios.post("/api/catalogo", data, {
         headers: {
             Authorization: `Bearer ${token}`
         }

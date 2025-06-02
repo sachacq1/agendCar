@@ -21,7 +21,9 @@ const PanelAdmin = () => {
     };
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location.href = "/login"; // o la ruta que uses para iniciar sesión
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
     };
 
     return (
