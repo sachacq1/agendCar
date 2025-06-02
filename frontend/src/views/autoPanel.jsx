@@ -31,7 +31,7 @@ const AutoPanel = () => {
 
     const obtenerAutos = async () => {
         try {
-            const res = await getMaintenancesByCarId();
+            const res = await getAllCars();
             setAutos(res);
         } catch (error) {
             console.error("Error al cargar autos:", error.message);
