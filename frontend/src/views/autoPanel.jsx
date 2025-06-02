@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMantenimiento } from "../services/apiMantenimiento.js";
+import { addMantenimiento, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -31,7 +31,7 @@ const AutoPanel = () => {
 
     const obtenerAutos = async () => {
         try {
-            const res = await getAllCars();
+            const res = await getMaintenancesByCarId();
             setAutos(res);
         } catch (error) {
             console.error("Error al cargar autos:", error.message);
