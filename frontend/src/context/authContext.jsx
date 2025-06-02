@@ -28,11 +28,13 @@ const AuthProvider = ({ children }) => {
 
         localStorage.setItem("token", token);
         localStorage.setItem("role", decoded.role);
-        localStorage.setItem("user", decoded.user);
+        localStorage.setItem("user", JSON.stringify(decoded.user));
+
 
         setAuthToken(token);
         setRole(decoded.role);
-        setUser(decoded.user);
+        setUser(JSON.parse(localStorage.getItem("user")));
+
     };
 
     // Logout: limpia todo
@@ -49,6 +51,8 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
+        const storedRole = localStorage.getItem("role");
+        const storedUser = localStorage.getItem("user");
 
         if (storedToken) {
             const isExpired = checkTokenExpiration(storedToken);
@@ -56,15 +60,21 @@ const AuthProvider = ({ children }) => {
             if (isExpired) {
                 console.warn("Token expirado. Cerrando sesión...");
                 logout();
-                navigate("/login");
+                if (window.location.pathname !== "/login") {
+                    navigate("/login");
+                }
             } else {
-                const decoded = jwtDecode(storedToken);
                 setAuthToken(storedToken);
-                setRole(decoded.role);
-                setUser(decoded.user);
+                setRole(storedRole);
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch {
+                    setUser(null);
+                }
             }
         }
     }, []);
+
 
     return (
         <AuthContext.Provider value={{ authToken, role, user, login, logout, isAuthenticated: !!authToken }}>
