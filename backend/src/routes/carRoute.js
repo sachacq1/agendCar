@@ -5,7 +5,8 @@ import { verifyToken } from "../middlewares/authMiddleware.js";
 const carRoute = Router();
 
 carRoute.post("/", verifyToken, createCar);
-carRoute.get("/", verifyToken, getCarsByUser); // <-- ruta para obtener autos
+carRoute.get("/:carId/mantenimiento", verifyToken, getCarsByUser); // <-- ruta para obtener autos
 carRoute.post("/:carId/mantenimiento", verifyToken, addMaintenance);
+
 
 export { carRoute };
