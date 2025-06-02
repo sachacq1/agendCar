@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/authContext.jsx";
+import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
     const { authToken } = useAuth();
@@ -17,7 +17,7 @@ const AutoPanel = () => {
     useEffect(() => {
         const fetchCatalogo = async () => {
             try {
-                const res = await axios.get("https://agendcar.onrender.com/catalogo");
+                const res = await axios.get("/api/catalogo");
                 setCatalogo(res.data);
             } catch (error) {
                 console.error("Error al obtener el catálogo:", error.message);
@@ -26,7 +26,7 @@ const AutoPanel = () => {
 
         const obtenerAutos = async () => {
             try {
-                const res = await axios.get("/api/autos", { headers });
+                const res = await axios.get("/autos", { headers });
                 setAutos(res.data);
             } catch (err) {
                 console.error(err);
@@ -43,9 +43,9 @@ const AutoPanel = () => {
 
     const agregarAuto = async () => {
         try {
-            await axios.post("/api/autos", nuevoAuto, { headers });
+            await axios.post("/autos", nuevoAuto, { headers });
             setNuevoAuto({ marca: "", modelo: "", anio: "" });
-            const res = await axios.get("/api/autos", { headers });
+            const res = await axios.get("/autos", { headers });
             setAutos(res.data);
         } catch (err) {
             console.error(err);
@@ -54,7 +54,7 @@ const AutoPanel = () => {
 
     const agregarMantenimiento = async () => {
         try {
-            await axios.post(`/api/autos/${selectedCarId}/mantenimiento`, mantenimiento, { headers });
+            await axios.post(`/autos/${selectedCarId}/mantenimiento`, mantenimiento, { headers });
             setMantenimiento({ tipo: "", fecha: "", kilometraje: "" });
             const res = await axios.get("/api/autos", { headers });
             setAutos(res.data);
