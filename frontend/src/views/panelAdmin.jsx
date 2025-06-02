@@ -8,6 +8,7 @@ const PanelAdmin = () => {
     const [catalogo, setCatalogo] = useState([]);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [autoEditando, setAutoEditando] = useState(null);
+    const [busqueda, setBusqueda] = useState("");
 
     const cargarCatalogo = async () => {
         try {
@@ -26,6 +27,8 @@ const PanelAdmin = () => {
         e.preventDefault();
         if (!marca || !modelo || !anio) return alert("Todos los campos son obligatorios");
 
+        if (anio < 1900 || anio > new Date().getFullYear()) return alert("El año debe ser válido");
+
         try {
             if (modoEdicion && autoEditando) {
                 await updateCar(autoEditando._id, { marca, modelo, anio });
@@ -35,16 +38,20 @@ const PanelAdmin = () => {
                 alert("Auto agregado correctamente");
             }
 
-            setMarca("");
-            setModelo("");
-            setAnio("");
-            setModoEdicion(false);
-            setAutoEditando(null);
+            resetFormulario();
             cargarCatalogo();
         } catch (error) {
             console.error(error);
             alert("Error al guardar auto");
         }
+    };
+
+    const resetFormulario = () => {
+        setMarca("");
+        setModelo("");
+        setAnio("");
+        setModoEdicion(false);
+        setAutoEditando(null);
     };
 
     const handleLogout = () => {
@@ -53,6 +60,7 @@ const PanelAdmin = () => {
         localStorage.removeItem("user");
         window.location.href = "/login";
     };
+
     const handleEditar = (auto) => {
         setMarca(auto.marca);
         setModelo(auto.modelo);
@@ -74,7 +82,11 @@ const PanelAdmin = () => {
         }
     };
 
-
+    const autosFiltrados = catalogo.filter(auto =>
+        `${auto.marca} ${auto.modelo} ${auto.anio}`
+            .toLowerCase()
+            .includes(busqueda.toLowerCase())
+    );
 
     return (
         <div className="container mt-5">
@@ -113,9 +125,19 @@ const PanelAdmin = () => {
                             required
                         />
                     </div>
-                    <button className="btn btn-success w-100 fw-bold">
+                    <button className="btn btn-success w-100 fw-bold mb-2">
                         {modoEdicion ? "Actualizar Auto" : "Agregar Auto"}
                     </button>
+
+                    {modoEdicion && (
+                        <button
+                            type="button"
+                            className="btn btn-secondary w-100 fw-bold"
+                            onClick={resetFormulario}
+                        >
+                            Cancelar Edición
+                        </button>
+                    )}
                 </form>
             </div>
 
@@ -125,22 +147,44 @@ const PanelAdmin = () => {
                 </button>
             </div>
 
-            <h3 className="text-white mt-4">Catálogo actual:</h3>
-            <ul className="list-group">
-                {catalogo.map((auto) => (
-                    <li key={auto._id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white">
-                        {auto.marca} {auto.modelo} {auto.anio}
-                        <div>
-                            <button className="btn btn-warning btn-sm me-2" onClick={() => handleEditar(auto)}>
-                                Editar
-                            </button>
-                            <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(auto._id)}>
-                                Eliminar
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            <h3 className="text-white mt-4">Buscar en el Catálogo:</h3>
+            <input
+                type="text"
+                className="form-control mb-3"
+                placeholder="Buscar por marca, modelo o año"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+            />
+
+            <h3 className="text-white">Resultados:</h3>
+            {autosFiltrados.length === 0 ? (
+                <p className="text-white">No se encontraron autos.</p>
+            ) : (
+                <ul className="list-group">
+                    {autosFiltrados.map((auto) => (
+                        <li
+                            key={auto._id}
+                            className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white"
+                        >
+                            {auto.marca} {auto.modelo} {auto.anio}
+                            <div>
+                                <button
+                                    className="btn btn-warning btn-sm me-2"
+                                    onClick={() => handleEditar(auto)}
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() => handleEliminar(auto._id)}
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
