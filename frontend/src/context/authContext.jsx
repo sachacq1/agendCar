@@ -1,39 +1,41 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { auth } from "../../../backend/src/middlewares/authMiddleware";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [authToken, setAuthToken] = useState(localStorage.getItem("token") || null);
-    const [role, setRole] = useState(localStorage.getItem("role") || null);
-    const [user, setUser] = useState(localStorage.getItem("user") || null);
+    const [authToken, setAuthToken] = useState(null);
+    const [role, setRole] = useState(null);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    // Verifica si el token está vencido
     const checkTokenExpiration = (token) => {
         try {
             const decoded = jwtDecode(token);
+            if (!decoded.exp) return false; // Si no tiene exp, lo consideramos válido
             const currentTime = Date.now() / 1000;
             return decoded.exp < currentTime;
         } catch (error) {
-            return true;
+            return true; // Token inválido
         }
     };
 
+    // Login: guarda el token y datos en localStorage y estado
     const login = (token) => {
+        const decoded = jwtDecode(token);
 
         localStorage.setItem("token", token);
-        const decoded = jwtDecode(token);
+        localStorage.setItem("role", decoded.role);
+        localStorage.setItem("user", decoded.user);
 
         setAuthToken(token);
         setRole(decoded.role);
         setUser(decoded.user);
-
-        localStorage.setItem("role", decoded.role);
-        localStorage.setItem("user", decoded.user);
     };
 
+    // Logout: limpia todo
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
@@ -44,31 +46,25 @@ const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+
     useEffect(() => {
-        if (!authToken) return;
+        const storedToken = localStorage.getItem("token");
 
-        const isExpired = checkTokenExpiration(authToken);
-        if (isExpired) {
-            console.warn("Token expirado, cerrando sesión");
-            logout();
-            navigate("/login");
-        } else {
-            try {
-                const decoded = jwtDecode(authToken);
-                setRole(decoded.role);
-                setUser(decoded.user);
+        if (storedToken) {
+            const isExpired = checkTokenExpiration(storedToken);
 
-                localStorage.setItem("role", decoded.role);
-                localStorage.setItem("user", decoded.user);
-            } catch (err) {
-                console.error("Error al decodificar token", err);
+            if (isExpired) {
+                console.warn("Token expirado. Cerrando sesión...");
                 logout();
                 navigate("/login");
+            } else {
+                const decoded = jwtDecode(storedToken);
+                setAuthToken(storedToken);
+                setRole(decoded.role);
+                setUser(decoded.user);
             }
         }
     }, []);
-
-
 
     return (
         <AuthContext.Provider value={{ authToken, role, user, login, logout, isAuthenticated: !!authToken }}>
