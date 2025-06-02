@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";More actions
+import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
 import { addMantenimiento } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
