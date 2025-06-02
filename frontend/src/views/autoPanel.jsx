@@ -31,12 +31,19 @@ const AutoPanel = () => {
 
     const obtenerAutos = async () => {
         try {
-            const res = await getAllCars();
-            setAutos(res);
+            const autosUsuario = await getAllCars(); // Esto asume que trae SOLO los autos del usuario
+            const autosConMantenimientos = await Promise.all(
+                autosUsuario.map(async (auto) => {
+                    const mantenimientos = await getMaintenancesByCarId(auto._id);
+                    return { ...auto, mantenimientos };
+                })
+            );
+            setAutos(autosConMantenimientos);
         } catch (error) {
-            console.error("Error al cargar autos:", error.message);
+            console.error("Error al cargar autos con mantenimientos:", error.message);
         }
     };
+
 
     const handleAgregarAuto = async () => {
         if (!nuevoAuto.catalogId) {
