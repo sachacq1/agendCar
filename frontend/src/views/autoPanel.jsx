@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMantenimiento } from "../services/apiMantenimiento.js";
+import { addMantenimiento, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -213,7 +213,8 @@ const AutoPanel = () => {
                                 {selectedCarId === auto._id && (
                                     <div className="mt-3">
                                         <ul className="text-white">
-                                            {auto.mantenimientos.length === 0 ? (
+
+                                            {!auto.mantenimientos || auto.mantenimientos.length === 0 ? (
                                                 <li>No hay mantenimientos</li>
                                             ) : (
                                                 auto.mantenimientos.map((m, idx) => (
@@ -222,6 +223,8 @@ const AutoPanel = () => {
                                                     </li>
                                                 ))
                                             )}
+
+
                                         </ul>
 
                                         <div className="mt-2">
