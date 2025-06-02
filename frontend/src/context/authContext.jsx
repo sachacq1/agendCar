@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { auth } from "../../../backend/src/middlewares/authMiddleware";
 
 export const AuthContext = createContext();
 
@@ -44,20 +45,30 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (authToken && checkTokenExpiration(authToken)) {
+        if (!authToken) return;
+
+        const isExpired = checkTokenExpiration(authToken);
+        if (isExpired) {
+            console.warn("Token expirado");
             logout();
             navigate("/login");
-        }
+        } else {
+            try {
+                const decoded = jwtDecode(authToken);
+                setRole(decoded.role);
+                setUser(decoded.user);
 
-        if (authToken) {
-            const decoded = jwtDecode(authToken);
-            setRole(decoded.role);
-            setUser(decoded.user);
+                localStorage.setItem("role", decoded.role);
+                localStorage.setItem("user", decoded.user);
 
-            localStorage.setItem("role", decoded.role);
-            localStorage.setItem("user", decoded.user);
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+                logout();
+                navigate("/login");
+
+            }
         }
-    }, [authToken, navigate]);
+    }, [])
 
 
     return (
