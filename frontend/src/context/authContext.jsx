@@ -14,27 +14,29 @@ const AuthProvider = ({ children }) => {
     const checkTokenExpiration = (token) => {
         try {
             const decoded = jwtDecode(token);
-            if (!decoded.exp) return false; // Si no tiene exp, lo consideramos válido
+            if (!decoded.exp) return false;
             const currentTime = Date.now() / 1000;
             return decoded.exp < currentTime;
         } catch (error) {
-            return true; // Token inválido
+            return true;
         }
     };
 
-    // Login: guarda el token y datos en localStorage y estado
+    // Login: guarda token y datos en localStorage y en estado
     const login = (token) => {
-        const decoded = jwtDecode(token);
+        try {
+            const decoded = jwtDecode(token);
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", decoded.role);
-        localStorage.setItem("user", JSON.stringify(decoded.user));
+            localStorage.setItem("token", token);
+            localStorage.setItem("role", decoded.role);
+            localStorage.setItem("user", JSON.stringify(decoded.user)); // Guarda como string
 
-
-        setAuthToken(token);
-        setRole(decoded.role);
-        setUser(JSON.parse(localStorage.getItem("user")));
-
+            setAuthToken(token);
+            setRole(decoded.role);
+            setUser(decoded.user);
+        } catch (error) {
+            console.error("Error al decodificar el token:", error);
+        }
     };
 
     // Logout: limpia todo
@@ -48,7 +50,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-
+    // Al montar, revisa si hay datos en localStorage
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedRole = localStorage.getItem("role");
@@ -68,16 +70,25 @@ const AuthProvider = ({ children }) => {
                 setRole(storedRole);
                 try {
                     setUser(JSON.parse(storedUser));
-                } catch {
+                } catch (error) {
+                    console.error("Error al parsear el usuario:", error);
                     setUser(null);
                 }
             }
         }
     }, []);
 
-
     return (
-        <AuthContext.Provider value={{ authToken, role, user, login, logout, isAuthenticated: !!authToken }}>
+        <AuthContext.Provider
+            value={{
+                authToken,
+                role,
+                user,
+                login,
+                logout,
+                isAuthenticated: !!authToken,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
