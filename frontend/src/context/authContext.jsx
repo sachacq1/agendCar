@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
 
         const isExpired = checkTokenExpiration(authToken);
         if (isExpired) {
-            console.warn("Token expirado");
+            console.warn("Token expirado, cerrando sesión");
             logout();
             navigate("/login");
         } else {
@@ -60,15 +60,14 @@ const AuthProvider = ({ children }) => {
 
                 localStorage.setItem("role", decoded.role);
                 localStorage.setItem("user", decoded.user);
-
-            } catch (error) {
-                console.error("Error al decodificar el token:", error);
+            } catch (err) {
+                console.error("Error al decodificar token", err);
                 logout();
                 navigate("/login");
-
             }
         }
-    }, [])
+    }, []);
+
 
 
     return (
