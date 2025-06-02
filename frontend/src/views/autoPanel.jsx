@@ -41,6 +41,14 @@ const AutoPanel = () => {
         setNuevoAuto({ ...nuevoAuto, [e.target.name]: e.target.value });
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        window.location.href = "/home";
+    };
+
+
     const agregarAuto = async () => {
         try {
             await axios.post("/autos", nuevoAuto, { headers });
@@ -152,6 +160,11 @@ const AutoPanel = () => {
                     </div>
                 </div>
             ))}
+            <div className="d-flex justify-content-center mb-3">
+                <button className="btn btn-danger" onClick={handleLogout}>More actions
+                    Cerrar Sesión
+                </button>
+            </div>
         </div>
     );
 };
