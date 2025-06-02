@@ -1,35 +1,87 @@
-import { useState } from "react";
-import { addCar } from "../services/apiCar.js";
+import { useState, useEffect } from "react";
+import { addCar, getAllCars, deleteCar, updateCar } from "../services/apiCar.js";
 
 const PanelAdmin = () => {
     const [marca, setMarca] = useState("");
     const [modelo, setModelo] = useState("");
     const [anio, setAnio] = useState("");
+    const [catalogo, setCatalogo] = useState([]);
+    const [modoEdicion, setModoEdicion] = useState(false);
+    const [autoEditando, setAutoEditando] = useState(null);
+
+    const cargarCatalogo = async () => {
+        try {
+            const data = await getAllCars();
+            setCatalogo(data);
+        } catch (error) {
+            console.error("Error al obtener el catálogo:", error);
+        }
+    };
+
+    useEffect(() => {
+        cargarCatalogo();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!marca || !modelo || !anio) return alert("Todos los campos son obligatorios");
 
         try {
-            await addCar({ marca, modelo, anio });
-            alert("Auto agregado correctamente");
-            setMarca(""); setModelo(""); setAnio("");
+            if (modoEdicion && autoEditando) {
+                await updateCar(autoEditando._id, { marca, modelo, anio });
+                alert("Auto actualizado correctamente");
+            } else {
+                await addCar({ marca, modelo, anio });
+                alert("Auto agregado correctamente");
+            }
+
+            setMarca("");
+            setModelo("");
+            setAnio("");
+            setModoEdicion(false);
+            setAutoEditando(null);
+            cargarCatalogo();
         } catch (error) {
             console.error(error);
-            alert("Error al agregar auto");
+            alert("Error al guardar auto");
         }
     };
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         localStorage.removeItem("user");
         window.location.href = "/login";
     };
+    const handleEditar = (auto) => {
+        setMarca(auto.marca);
+        setModelo(auto.modelo);
+        setAnio(auto.anio);
+        setModoEdicion(true);
+        setAutoEditando(auto);
+    };
+
+    const handleEliminar = async (id) => {
+        if (confirm("¿Estás seguro de eliminar este auto?")) {
+            try {
+                await deleteCar(id);
+                alert("Auto eliminado");
+                cargarCatalogo();
+            } catch (error) {
+                console.error(error);
+                alert("Error al eliminar auto");
+            }
+        }
+    };
+
+
 
     return (
         <div className="container mt-5">
             <div className="card p-4 shadow bg-dark text-white">
-                <h2 className="text-success text-center mb-4">Agregar Auto al Catálogo</h2>
+                <h2 className="text-success text-center mb-4">
+                    {modoEdicion ? "Editar Auto" : "Agregar Auto al Catálogo"}
+                </h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">Marca</label>
@@ -61,15 +113,34 @@ const PanelAdmin = () => {
                             required
                         />
                     </div>
-                    <button className="btn btn-success w-100 fw-bold">Agregar Auto</button>
-
+                    <button className="btn btn-success w-100 fw-bold">
+                        {modoEdicion ? "Actualizar Auto" : "Agregar Auto"}
+                    </button>
                 </form>
             </div>
-            <div className="d-flex justify-content-center mb-3">
+
+            <div className="d-flex justify-content-center my-4">
                 <button className="btn btn-danger" onClick={handleLogout}>
                     Cerrar Sesión
                 </button>
             </div>
+
+            <h3 className="text-white mt-4">Catálogo actual:</h3>
+            <ul className="list-group">
+                {catalogo.map((auto) => (
+                    <li key={auto._id} className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white">
+                        {auto.marca} {auto.modelo} {auto.anio}
+                        <div>
+                            <button className="btn btn-warning btn-sm me-2" onClick={() => handleEditar(auto)}>
+                                Editar
+                            </button>
+                            <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(auto._id)}>
+                                Eliminar
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
