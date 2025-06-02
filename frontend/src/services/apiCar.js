@@ -2,7 +2,7 @@ import axios from "./axiosInstance.js";
 
 export const getAllCars = async () => {
     const token = localStorage.getItem("token");
-    const res = await axios.get("/autos", {
+    const res = await axios.get("/api/catalogo", {
         headers: {
             Authorization: `Bearer ${token}`
         }
