@@ -35,12 +35,18 @@ const createCar = async (req, res) => {
 
 // Obtener autos del usuario
 const getCarsByUser = async (req, res) => {
+    const { carId } = req.params;
+
     try {
-        const userId = req.user._id;
-        const autos = await Car.find({ userId });
-        res.status(200).json(autos);
+        const car = await Car.findById(carId);
+        if (!car) {
+            return res.status(404).json({ message: "Auto no encontrado" });
+        }
+
+        res.status(200).json(car.maintenimientos || []);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener autos: " + error.message });
+        console.error("Error al obtener mantenimientos:", error);
+        res.status(500).json({ message: "Error del servidor al obtener mantenimientos" });
     }
 };
 
