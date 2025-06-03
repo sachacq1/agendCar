@@ -5,7 +5,7 @@ import axios from "./axiosInstance.js"
 // Agregar un mantenimiento a un auto
 const addMantenimiento = async (carId, mantenimiento) => {
     try {
-        const res = await axios.post(`/autos/${carId}/mantenimiento`, mantenimiento);
+        const res = await axios.post(`/autos/${carId}/mantenimientos`, mantenimiento);
         return res.data;
     } catch (error) {
         console.error("Error al agregar mantenimiento:", error.message);
@@ -23,6 +23,5 @@ const getMaintenancesByCarId = async (carId) => {
         throw new Error("No se pudieron obtener los mantenimientos");
     }
 };
-
 
 export { addMantenimiento, getMaintenancesByCarId };
