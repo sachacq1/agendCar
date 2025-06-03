@@ -31,7 +31,7 @@ const AutoPanel = () => {
 
     const obtenerAutos = async () => {
         try {
-            const autos = await getAutos(); // primero obtenés todos los autos
+            const autos = await getAllCars(); // primero obtenés todos los autos
 
             // ahora agregás los mantenimientos a cada auto
             const autosConMantenimientos = await Promise.all(
