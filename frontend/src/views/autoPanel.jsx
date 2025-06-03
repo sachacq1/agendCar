@@ -1,10 +1,12 @@
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllCars, addCar } from "../services/apiCar.js";
 import { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM, addCarM } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
+    const navigate = useNavigate();
     const [autos, setAutos] = useState([]);
     const [catalogo, setCatalogo] = useState([]);
     const [nuevoAuto, setNuevoAuto] = useState({
@@ -20,6 +22,12 @@ const AutoPanel = () => {
     });
     const [selectedCarId, setSelectedCarId] = useState(null);
     const [mostrarFormularioAuto, setMostrarFormularioAuto] = useState(false);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    };
+
 
     const obtenerCatalogo = async () => {
         try {
@@ -208,7 +216,7 @@ const AutoPanel = () => {
                                     <div className="mt-3">
                                         <ul>
                                             {auto.mantenimientos.length === 0 ? (
-                                                <li>No hay mantenimientos</li>
+                                                <li className="text-white">No hay mantenimientos</li>
                                             ) : (
                                                 auto.mantenimientos.map((m, idx) => (
                                                     <li key={idx} className="text-white">
@@ -268,6 +276,15 @@ const AutoPanel = () => {
                     ))
                 )}
             </div>
+
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2 className="text-center m-0">Mis Autos</h2>
+                <button className="btn btn-danger" onClick={handleLogout}>
+                    Cerrar sesión
+                </button>
+            </div>
+
+
         </div>
     );
 };
