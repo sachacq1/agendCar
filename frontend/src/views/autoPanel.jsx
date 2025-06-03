@@ -45,18 +45,15 @@ const AutoPanel = () => {
             return;
         }
         try {
-            await addCarM({
-                marca: nuevoAuto.marca,
-                modelo: nuevoAuto.modelo,
-                anio: nuevoAuto.anio
-            });
+            await addCarM({ catalogId: nuevoAuto.catalogId });
             setNuevoAuto({ marca: "", modelo: "", anio: "", catalogId: "" });
             obtenerAutos();
         } catch (error) {
-            console.error("Error al agregar el auto:", error.message);
+            console.error("Error al agregar el auto:", error.response?.data || error.message);
             alert("No se pudo agregar el auto");
         }
     };
+
 
     const handleAgregarMantenimiento = async (id) => {
         try {
