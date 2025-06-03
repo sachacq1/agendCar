@@ -9,7 +9,8 @@ const AutoPanel = () => {
     const [nuevoAuto, setNuevoAuto] = useState({
         marca: "",
         modelo: "",
-        anio: ""
+        anio: "",
+        catalogId: ""
     });
     const [mantenimiento, setMantenimiento] = useState({
         tipo: "",
@@ -28,14 +29,22 @@ const AutoPanel = () => {
         }
     };
 
-    const obtenerAutos = async (carId) => {
+    const obtenerAutos = async () => {
         try {
-            const res = await getMaintenancesByCarId(carId);
-            setAutos(res);
+            const res = await getAllCars();
+            const autosConMantenimientos = await Promise.all(
+                res.map(async (auto) => {
+                    const mantenimientos = await getMaintenancesByCarId(auto._id);
+                    return { ...auto, mantenimientos };
+                })
+            );
+            setAutos(autosConMantenimientos);
         } catch (error) {
-            console.error("Error al cargar autos:", error.message);
+            console.error("Error al obtener autos:", error.message);
         }
     };
+
+
     const handleAgregarAuto = async () => {
         if (!nuevoAuto.catalogId) {
             alert("Seleccioná un auto del catálogo");
@@ -43,19 +52,19 @@ const AutoPanel = () => {
         }
         try {
             await addCar({ catalogId: nuevoAuto.catalogId });
-            setNuevoAuto({ marca: "", modelo: "", anio: "" });
-            await obtenerAutos();
+            setNuevoAuto({ marca: "", modelo: "", anio: "", catalogId: "" });
+            obtenerAutos();
         } catch (error) {
             console.error("Error al agregar el auto:", error.message);
             alert("No se pudo agregar el auto");
         }
     };
 
-    const handleAgregarMantenimiento = async (carId) => {
+    const handleAgregarMantenimiento = async (id) => {
         try {
-            await addMantenimiento(carId, mantenimiento);
+            await addMantenimiento(id, mantenimiento);
             setMantenimiento({ tipo: "", fecha: "", kilometraje: "" });
-            await obtenerAutos();
+            obtenerAutos();
         } catch (error) {
             console.error("Error al agregar mantenimiento:", error.message);
         }
@@ -115,11 +124,12 @@ const AutoPanel = () => {
                                 >
                                     <option value="">Marca</option>
                                     {[...new Set(catalogo.map((c) => c.marca))].map((marca, i) => (
-                                        <option key={i} value={marca}>{marca}</option>
+                                        <option key={i} value={marca}>
+                                            {marca}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
-
                             <div className="col-md-4">
                                 <select
                                     className="form-select"
@@ -136,31 +146,34 @@ const AutoPanel = () => {
                                 >
                                     <option value="">Modelo</option>
                                     {[...new Set(modelosFiltrados)].map((modelo, i) => (
-                                        <option key={i} value={modelo}>{modelo}</option>
+                                        <option key={i} value={modelo}>
+                                            {modelo}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
-
                             <div className="col-md-4">
                                 <select
                                     className="form-select"
                                     value={nuevoAuto.catalogId}
                                     onChange={(e) => {
-                                        const selected = catalogo.find(c => c._id === e.target.value);
+                                        const catalogId = e.target.value;
+                                        const selectedAuto = catalogo.find((c) => c._id === catalogId);
                                         setNuevoAuto({
-                                            catalogId: selected._id,
-                                            marca: selected.marca,
-                                            modelo: selected.modelo,
-                                            anio: selected.anio
+                                            catalogId,
+                                            marca: selectedAuto?.marca || "",
+                                            modelo: selectedAuto?.modelo || "",
+                                            anio: selectedAuto?.anio || "",
                                         });
                                     }}
                                     disabled={!nuevoAuto.modelo}
                                 >
                                     <option value="">Año</option>
                                     {catalogo
-                                        .filter((c) =>
-                                            c.marca === nuevoAuto.marca &&
-                                            c.modelo === nuevoAuto.modelo
+                                        .filter(
+                                            (c) =>
+                                                c.marca === nuevoAuto.marca &&
+                                                c.modelo === nuevoAuto.modelo
                                         )
                                         .map((auto) => (
                                             <option key={auto._id} value={auto._id}>
@@ -170,7 +183,6 @@ const AutoPanel = () => {
                                 </select>
                             </div>
                         </div>
-
                         <button className="btn btn-success mt-3" onClick={handleAgregarAuto}>
                             Agregar Auto
                         </button>
@@ -207,7 +219,7 @@ const AutoPanel = () => {
                                 {selectedCarId === auto._id && (
                                     <div className="mt-3">
                                         <ul className="text-white">
-                                            {!auto.mantenimientos || auto.mantenimientos.length === 0 ? (
+                                            {auto.mantenimientos.length === 0 ? (
                                                 <li>No hay mantenimientos</li>
                                             ) : (
                                                 auto.mantenimientos.map((m, idx) => (
@@ -250,7 +262,7 @@ const AutoPanel = () => {
                                                 onChange={(e) =>
                                                     setMantenimiento({
                                                         ...mantenimiento,
-                                                        kilometraje: Number(e.target.value),
+                                                        kilometraje: e.target.value,
                                                     })
                                                 }
                                             />
@@ -268,7 +280,6 @@ const AutoPanel = () => {
                     ))
                 )}
             </div>
-
             <div className="d-flex justify-content-center mb-3">
                 <button className="btn btn-danger" onClick={handleLogout}>
                     Cerrar Sesión
