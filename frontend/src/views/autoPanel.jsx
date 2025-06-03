@@ -45,7 +45,11 @@ const AutoPanel = () => {
             return;
         }
         try {
-            await addCar({ catalogId: nuevoAuto.catalogId });
+            await addCar({
+                marca: nuevoAuto.marca,
+                modelo: nuevoAuto.modelo,
+                anio: nuevoAuto.anio
+            });
             setNuevoAuto({ marca: "", modelo: "", anio: "", catalogId: "" });
             obtenerAutos();
         } catch (error) {
