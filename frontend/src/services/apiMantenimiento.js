@@ -14,9 +14,9 @@ const addMantenimiento = async (carId, mantenimiento) => {
 };
 
 // Obtener mantenimientos de un auto
-const obtenerAutos = async () => {
+const getMaintenancesByCarId = async (carId) => {
     try {
-        const autosBase = await getAllCars();
+        const autosBase = await axios.get(`/autos/${carId}/mantenimiento`);
 
         const autosConMantenimientos = await Promise.all(
             autosBase.map(async (auto) => {
