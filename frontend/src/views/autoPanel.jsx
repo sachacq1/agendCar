@@ -43,7 +43,7 @@ const AutoPanel = () => {
         }
         try {
             await addCar({ catalogId: nuevoAuto.catalogId });
-            setNuevoAuto({ marca: "", modelo: "", anio: "", catalogId: "" });
+            setNuevoAuto({ marca: "", modelo: "", anio: "" });
             await obtenerAutos();
         } catch (error) {
             console.error("Error al agregar el auto:", error.message);
