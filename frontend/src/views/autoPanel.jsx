@@ -29,14 +29,14 @@ const AutoPanel = () => {
         }
     };
 
-    const obtenerAutos = async (carId) => {
+    const obtenerAutos = async () => {
         try {
-            const autos = await getAllCars(); // primero obtenés todos los autos
+            const autos = await getAutos(); // primero obtenés todos los autos
 
             // ahora agregás los mantenimientos a cada auto
             const autosConMantenimientos = await Promise.all(
                 autos.map(async (auto) => {
-                    const mantenimientos = await getMaintenancesByCarId(carId);
+                    const mantenimientos = await getMaintenancesByCarId(auto._id);
                     return {
                         ...auto,
                         mantenimientos,
@@ -49,7 +49,6 @@ const AutoPanel = () => {
             console.error("Error al cargar autos con mantenimientos:", error.message);
         }
     };
-
     const handleAgregarAuto = async () => {
         if (!nuevoAuto.catalogId) {
             alert("Seleccioná un auto del catálogo");
