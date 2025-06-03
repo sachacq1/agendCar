@@ -1,34 +1,22 @@
 import CarCatalog from "../models/catalogoCarModel.js";
 
 const addCarToCatalog = async (req, res) => {
-    const userId = req.user._id;
-    const { catalogId } = req.body;
-
-    if (!catalogId) {
-        return res.status(400).json({ error: "Falta el ID del catálogo" });
-    }
-
     try {
-        const catalogEntry = await CarCatalog.findById(catalogId);
-        if (!catalogEntry) {
-            return res.status(404).json({ error: "Auto no encontrado en el catálogo" });
+        const { marca, modelo, anio } = req.body;
+
+        if (!marca || !modelo || !anio) {
+            return res.status(400).json({ error: "Todos los campos son obligatorios" });
         }
 
-        const nuevoAuto = new Car({
-            marca: catalogEntry.marca,
-            modelo: catalogEntry.modelo,
-            anio: catalogEntry.anio,
-            userId: userId,
-            mantenimientos: [],
-        });
+        const nuevo = new CarCatalog({ marca, modelo, anio });
+        await nuevo.save();
 
-        await nuevoAuto.save();
-        res.status(201).json(nuevoAuto);
+        res.status(201).json({ message: "Auto agregado al catálogo", auto: nuevo });
     } catch (error) {
-        console.error("Error al agregar auto:", error.message);
-        res.status(500).json({ error: "Error al agregar auto" });
+        res.status(500).json({ error: "Error al agregar al catálogo: " + error.message });
     }
 };
+
 const getCatalog = async (req, res) => {
     try {
         const autos = await CarCatalog.find();
