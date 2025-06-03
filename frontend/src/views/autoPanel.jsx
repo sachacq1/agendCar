@@ -210,7 +210,7 @@ const AutoPanel = () => {
                                                 <li>No hay mantenimientos</li>
                                             ) : (
                                                 auto.mantenimientos.map((m, idx) => (
-                                                    <li key={idx}>
+                                                    <li key={idx} className="text-white">
                                                         {m.tipo} - {new Date(m.fecha).toLocaleDateString()} - {m.kilometraje} km
                                                     </li>
                                                 ))
@@ -221,7 +221,7 @@ const AutoPanel = () => {
                                             <input
                                                 type="text"
                                                 placeholder="Tipo"
-                                                className="form-control mb-2 text-white"
+                                                className="form-control mb-2"
                                                 value={mantenimiento.tipo}
                                                 onChange={(e) =>
                                                     setMantenimiento({
@@ -232,7 +232,7 @@ const AutoPanel = () => {
                                             />
                                             <input
                                                 type="date"
-                                                className="form-control mb-2 text-white"
+                                                className="form-control mb-2"
                                                 value={mantenimiento.fecha}
                                                 onChange={(e) =>
                                                     setMantenimiento({
@@ -244,7 +244,7 @@ const AutoPanel = () => {
                                             <input
                                                 type="number"
                                                 placeholder="Kilometraje"
-                                                className="form-control mb-2 text-white"
+                                                className="form-control mb-2"
                                                 value={mantenimiento.kilometraje}
                                                 onChange={(e) =>
                                                     setMantenimiento({
