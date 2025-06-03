@@ -278,7 +278,7 @@ const AutoPanel = () => {
             </div>
 
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="text-center m-0">Mis Autos</h2>
+
                 <button className="btn btn-danger" onClick={handleLogout}>
                     Cerrar sesión
                 </button>
