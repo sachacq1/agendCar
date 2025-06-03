@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMantenimiento } from "../services/apiMantenimiento.js";
+import { addMantenimiento, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -23,16 +23,16 @@ const AutoPanel = () => {
 
     const obtenerCatalogo = async () => {
         try {
-            const res = await axios.get("/catalogo");
+            const res = await axios.get("/api/catalogo");
             setCatalogo(res.data);
         } catch (error) {
             console.error("Error al obtener catálogo:", error.message);
         }
     };
 
-    const obtenerAutos = async () => {
+    const obtenerAutos = async (carId) => {
         try {
-            const res = await getAllCars();
+            const res = await getMaintenancesByCarId(carId);
             console.log("Autos cargados:", res);
             setAutos(res);
         } catch (error) {
