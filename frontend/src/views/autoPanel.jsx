@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMaintenanceToCar, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
+import { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -30,10 +30,9 @@ const AutoPanel = () => {
         }
     };
 
-    const obtenerAutos = async (carId) => {
+    const obtenerAutos = async () => {
         try {
-            const res = await getMaintenancesByCarId(carId);
-            console.log("Autos cargados:", res);
+            const res = await getAllcarsM();
             setAutos(res);
         } catch (error) {
             console.error("Error al cargar autos:", error.message);

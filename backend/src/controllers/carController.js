@@ -68,4 +68,13 @@ const addMaintenance = async (req, res) => {
     }
 };
 
-export { createCar, addMaintenance, getCarsByUser };
+const getAllcars = async (req, res) => {
+    try {
+        const autos = await Car.find();
+        res.status(200).json(autos);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener autos: " + error.message });
+    }
+};
+
+export { createCar, addMaintenance, getCarsByUser, getAllcars };

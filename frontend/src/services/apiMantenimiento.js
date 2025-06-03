@@ -25,4 +25,14 @@ const getMaintenancesByCarId = async (carId) => {
     }
 };
 
-export { addMaintenanceToCar, getMaintenancesByCarId };
+const getAllcarsM = async () => {
+    try {
+        const res = await axios.get("/autos");
+        return res.data;
+    } catch (error) {
+        console.error("Error al obtener autos:", error.message);
+        throw new Error("No se pudieron obtener los autos");
+    }
+};
+
+export { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM };
