@@ -9,8 +9,7 @@ const AutoPanel = () => {
     const [nuevoAuto, setNuevoAuto] = useState({
         marca: "",
         modelo: "",
-        anio: "",
-        catalogId: ""
+        anio: ""
     });
     const [mantenimiento, setMantenimiento] = useState({
         tipo: "",
