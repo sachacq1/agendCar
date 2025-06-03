@@ -1,4 +1,4 @@
-import axios from "./axiosInstance.js";
+import axios from "axios";
 
 const AUTOS_ENDPOINT = import.meta.env.VITE_AUTOS_ENDPOINT;
 

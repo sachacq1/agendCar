@@ -1,7 +1,7 @@
+
 import { useEffect, useState } from "react";
-import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMantenimiento, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
-import axios from "../services/axiosInstance.js";
+import { getAllCars, addCar } from "../services/apiCar";
+import axios from "axios";
 
 const AutoPanel = () => {
     const [autos, setAutos] = useState([]);
@@ -18,21 +18,21 @@ const AutoPanel = () => {
         kilometraje: ""
     });
     const [selectedCarId, setSelectedCarId] = useState(null);
-    const [mostrarFormularioAuto, setMostrarFormularioAuto] = useState(false);
 
+    // Obtener catálogo de autos
     const obtenerCatalogo = async () => {
         try {
-            const res = await axios.get("/api/catalogo");
+            const res = await axios.get("https://agendcar.onrender.com/api/catalogo");
             setCatalogo(res.data);
         } catch (error) {
             console.error("Error al obtener catálogo:", error.message);
         }
     };
 
-    const obtenerAutos = async (carId) => {
+    // Obtener autos del usuario
+    const obtenerAutos = async () => {
         try {
-            const res = await getMaintenancesByCarId(carId);
-            console.log("Autos cargados:", res);
+            const res = await getAllCars();
             setAutos(res);
         } catch (error) {
             console.error("Error al cargar autos:", error.message);
@@ -56,7 +56,11 @@ const AutoPanel = () => {
 
     const handleAgregarMantenimiento = async (id) => {
         try {
-            await addMantenimiento(id, mantenimiento);
+            await axios.post(
+                `https://agendcar.onrender.com/autos/${id}/mantenimiento`,
+                mantenimiento,
+                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            );
             setMantenimiento({ tipo: "", fecha: "", kilometraje: "" });
             obtenerAutos();
         } catch (error) {
@@ -80,110 +84,96 @@ const AutoPanel = () => {
         obtenerAutos();
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        localStorage.removeItem("user");
-        window.location.href = "/home";
-    };
-
     return (
-        <div className="container py-4 vh-100 w-100" style={{ backgroundColor: "#121212", color: "#00ff88", opacity: "0.8" }}>
+        <div className="container py-4" style={{ backgroundColor: "#121212", color: "#00ff88" }}>
             <h2 className="text-center mb-4">Mis Autos</h2>
 
-            <button
-                className="btn btn-secondary mb-3"
-                onClick={() => setMostrarFormularioAuto(!mostrarFormularioAuto)}
-            >
-                {mostrarFormularioAuto ? "Ocultar Formulario" : "Agregar Auto"}
-            </button>
-
-            {mostrarFormularioAuto && (
-                <div className="card mb-4" style={{ backgroundColor: "#1e1e1e" }}>
-                    <div className="card-body">
-                        <h5>Agregar Auto</h5>
-                        <div className="row g-2">
-                            <div className="col-md-4">
-                                <select
-                                    className="form-select"
-                                    value={nuevoAuto.marca}
-                                    onChange={(e) =>
-                                        setNuevoAuto({
-                                            marca: e.target.value,
-                                            modelo: "",
-                                            anio: "",
-                                            catalogId: ""
-                                        })
-                                    }
-                                >
-                                    <option value="">Marca</option>
-                                    {[...new Set(catalogo.map((c) => c.marca))].map((marca, i) => (
-                                        <option key={i} value={marca}>
-                                            {marca}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-md-4">
-                                <select
-                                    className="form-select"
-                                    value={nuevoAuto.modelo}
-                                    onChange={(e) =>
-                                        setNuevoAuto({
-                                            ...nuevoAuto,
-                                            modelo: e.target.value,
-                                            anio: "",
-                                            catalogId: ""
-                                        })
-                                    }
-                                    disabled={!nuevoAuto.marca}
-                                >
-                                    <option value="">Modelo</option>
-                                    {[...new Set(modelosFiltrados)].map((modelo, i) => (
-                                        <option key={i} value={modelo}>
-                                            {modelo}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-md-4">
-                                <select
-                                    className="form-select"
-                                    value={nuevoAuto.catalogId}
-                                    onChange={(e) => {
-                                        const catalogId = e.target.value;
-                                        const selectedAuto = catalogo.find((c) => c._id === catalogId);
-                                        setNuevoAuto({
-                                            catalogId,
-                                            marca: selectedAuto?.marca || "",
-                                            modelo: selectedAuto?.modelo || "",
-                                            anio: selectedAuto?.anio || "",
-                                        });
-                                    }}
-                                    disabled={!nuevoAuto.modelo}
-                                >
-                                    <option value="">Año</option>
-                                    {catalogo
-                                        .filter(
-                                            (c) =>
-                                                c.marca === nuevoAuto.marca &&
-                                                c.modelo === nuevoAuto.modelo
-                                        )
-                                        .map((auto) => (
-                                            <option key={auto._id} value={auto._id}>
-                                                {auto.anio}
-                                            </option>
-                                        ))}
-                                </select>
-                            </div>
+            {/* Formulario de nuevo auto */}
+            <div className="card mb-4" style={{ backgroundColor: "#1e1e1e" }}>
+                <div className="card-body">
+                    <h5>Agregar Auto</h5>
+                    <div className="row g-2">
+                        <div className="col-md-4">
+                            <select
+                                className="form-select"
+                                value={nuevoAuto.marca}
+                                onChange={(e) =>
+                                    setNuevoAuto({
+                                        marca: e.target.value,
+                                        modelo: "",
+                                        anio: "",
+                                        catalogId: ""
+                                    })
+                                }
+                            >
+                                <option value="">Marca</option>
+                                {[...new Set(catalogo.map((c) => c.marca))].map((marca, i) => (
+                                    <option key={i} value={marca}>
+                                        {marca}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        <button className="btn btn-success mt-3" onClick={handleAgregarAuto}>
-                            Agregar Auto
-                        </button>
+                        <div className="col-md-4">
+                            <select
+                                className="form-select"
+                                value={nuevoAuto.modelo}
+                                onChange={(e) =>
+                                    setNuevoAuto({
+                                        ...nuevoAuto,
+                                        modelo: e.target.value,
+                                        anio: "",
+                                        catalogId: ""
+                                    })
+                                }
+                                disabled={!nuevoAuto.marca}
+                            >
+                                <option value="">Modelo</option>
+                                {[...new Set(modelosFiltrados)].map((modelo, i) => (
+                                    <option key={i} value={modelo}>
+                                        {modelo}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="col-md-4">
+                            <select
+                                className="form-select"
+                                value={nuevoAuto.catalogId}
+                                onChange={(e) => {
+                                    const catalogId = e.target.value;
+                                    const selectedAuto = catalogo.find((c) => c._id === catalogId);
+                                    setNuevoAuto({
+                                        catalogId,
+                                        marca: selectedAuto?.marca || "",
+                                        modelo: selectedAuto?.modelo || "",
+                                        anio: selectedAuto?.anio || "",
+                                    });
+                                }}
+                                disabled={!nuevoAuto.modelo}
+                            >
+                                <option value="">Año</option>
+                                {catalogo
+                                    .filter(
+                                        (c) =>
+                                            c.marca === nuevoAuto.marca &&
+                                            c.modelo === nuevoAuto.modelo
+                                    )
+                                    .map((auto) => (
+                                        <option key={auto._id} value={auto._id}>
+                                            {auto.anio}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
                     </div>
+                    <button className="btn btn-success mt-3" onClick={handleAgregarAuto}>
+                        Agregar Auto
+                    </button>
                 </div>
-            )}
+            </div>
 
+            {/* Listado de autos */}
             <div>
                 {autos.length === 0 ? (
                     <p>No tenés autos agregados</p>
@@ -198,7 +188,7 @@ const AutoPanel = () => {
                             }}
                         >
                             <div className="card-body">
-                                <h5 className="text-white">{auto.marca} {auto.modelo} {auto.anio}</h5>
+                                <h5>{auto.marca} {auto.modelo} {auto.anio}</h5>
                                 <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() =>
@@ -212,7 +202,8 @@ const AutoPanel = () => {
 
                                 {selectedCarId === auto._id && (
                                     <div className="mt-3">
-                                        <ul className="text-white">
+                                        {/* Listar mantenimientos */}
+                                        <ul>
                                             {auto.mantenimientos.length === 0 ? (
                                                 <li>No hay mantenimientos</li>
                                             ) : (
@@ -224,6 +215,7 @@ const AutoPanel = () => {
                                             )}
                                         </ul>
 
+                                        {/* Form para agregar mantenimiento */}
                                         <div className="mt-2">
                                             <input
                                                 type="text"
@@ -273,11 +265,6 @@ const AutoPanel = () => {
                         </div>
                     ))
                 )}
-            </div>
-            <div className="d-flex justify-content-center mb-3">
-                <button className="btn btn-danger" onClick={handleLogout}>
-                    Cerrar Sesión
-                </button>
             </div>
         </div>
     );
