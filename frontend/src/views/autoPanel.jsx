@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMantenimiento, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
+import { addMaintenanceToCar, getMaintenancesByCarId } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -57,7 +57,7 @@ const AutoPanel = () => {
 
     const handleAgregarMantenimiento = async (id) => {
         try {
-            await addMantenimiento(id, mantenimiento);
+            await addMaintenanceToCar(id, mantenimiento);
             setMantenimiento({ tipo: "", fecha: "", kilometraje: "" });
             obtenerAutos();
         } catch (error) {
