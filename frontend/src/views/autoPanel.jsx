@@ -34,6 +34,7 @@ const AutoPanel = () => {
             const autos = await getAllCars(); // primero obtenés todos los autos
 
             // ahora agregás los mantenimientos a cada auto
+            const carId = autos.map((auto) => userId);
             const autosConMantenimientos = await Promise.all(
                 autos.map(async (auto) => {
                     const mantenimientos = await getMaintenancesByCarId(carId);
