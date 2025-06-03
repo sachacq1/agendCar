@@ -1,3 +1,4 @@
+
 import CarCatalog from "../models/catalogoCarModel.js";
 
 const addCarToCatalog = async (req, res) => {
