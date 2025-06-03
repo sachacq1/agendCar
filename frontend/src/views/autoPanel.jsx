@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllCars, addCar } from "../services/apiCar.js";
-import { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM } from "../services/apiMantenimiento.js";
+import { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM, addCarM } from "../services/apiMantenimiento.js";
 import axios from "../services/axiosInstance.js";
 
 const AutoPanel = () => {
@@ -45,7 +45,7 @@ const AutoPanel = () => {
             return;
         }
         try {
-            await addCar({
+            await addCarM({
                 marca: nuevoAuto.marca,
                 modelo: nuevoAuto.modelo,
                 anio: nuevoAuto.anio

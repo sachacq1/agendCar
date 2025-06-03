@@ -14,6 +14,20 @@ const addMaintenanceToCar = async (carId, mantenimiento) => {
     }
 };
 
+//agregar un auto
+const addCarM = async (auto) => {
+    try {
+        const res = await axios.post("/autos", auto);
+        return res.data;
+
+    } catch (error) {
+        console.error("Error al agregar auto:", error.message);
+        throw new Error("No se pudo agregar el auto");
+
+    }
+
+}
+
 // Obtener mantenimientos de un auto
 const getMaintenancesByCarId = async (carId) => {
     try {
@@ -35,4 +49,5 @@ const getAllcarsM = async () => {
     }
 };
 
-export { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM };
+
+export { addMaintenanceToCar, getMaintenancesByCarId, getAllcarsM, addCarM };
