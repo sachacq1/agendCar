@@ -94,7 +94,7 @@ const AutoPanel = () => {
             {mostrarFormularioAuto && (
                 <div className="card mb-4" style={{ backgroundColor: "#1e1e1e" }}>
                     <div className="card-body">
-                        <h5>Agregar Auto</h5>
+                        <h5 className="text-white">Agregar Auto</h5>
                         <div className="row g-2">
                             <div className="col-md-4">
                                 <select
@@ -191,7 +191,7 @@ const AutoPanel = () => {
                             }}
                         >
                             <div className="card-body">
-                                <h5>{auto.marca} {auto.modelo} {auto.anio}</h5>
+                                <h5 className="text-white">{auto.marca} {auto.modelo} {auto.anio}</h5>
                                 <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() =>
@@ -221,7 +221,7 @@ const AutoPanel = () => {
                                             <input
                                                 type="text"
                                                 placeholder="Tipo"
-                                                className="form-control mb-2"
+                                                className="form-control mb-2 text-white"
                                                 value={mantenimiento.tipo}
                                                 onChange={(e) =>
                                                     setMantenimiento({
@@ -232,7 +232,7 @@ const AutoPanel = () => {
                                             />
                                             <input
                                                 type="date"
-                                                className="form-control mb-2"
+                                                className="form-control mb-2 text-white"
                                                 value={mantenimiento.fecha}
                                                 onChange={(e) =>
                                                     setMantenimiento({
@@ -244,7 +244,7 @@ const AutoPanel = () => {
                                             <input
                                                 type="number"
                                                 placeholder="Kilometraje"
-                                                className="form-control mb-2"
+                                                className="form-control mb-2 text-white"
                                                 value={mantenimiento.kilometraje}
                                                 onChange={(e) =>
                                                     setMantenimiento({
