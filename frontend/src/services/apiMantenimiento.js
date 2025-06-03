@@ -16,21 +16,11 @@ const addMantenimiento = async (carId, mantenimiento) => {
 // Obtener mantenimientos de un auto
 const getMaintenancesByCarId = async (carId) => {
     try {
-        const autosBase = await axios.get(`/autos/${carId}/mantenimiento`);
-
-        const autosConMantenimientos = await Promise.all(
-            autosBase.map(async (auto) => {
-                const mantenimientos = await getMaintenancesByCarId(auto._id);
-                return {
-                    ...auto,
-                    mantenimientos,
-                };
-            })
-        );
-
-        setAutos(autosConMantenimientos);
+        const res = await axios.get(`/autos/${carId}/mantenimientos`);
+        return res.data;
     } catch (error) {
-        console.error("Error al cargar autos con mantenimientos:", error.message);
+        console.error("Error al obtener mantenimientos:", error.message);
+        throw new Error("No se pudieron obtener los mantenimientos");
     }
 };
 
